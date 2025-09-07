@@ -52,20 +52,32 @@ def show_speech_to_text():
                     if "Error" not in result and "unavailable" not in result:
                         st.success("Transcription completed!")
                         st.text_area("Transcribed Text:", result, height=100)
-                        st.code(result)
                     else:
                         st.warning("Transcription service unavailable.")
-                        st.info("Please use manual text input below.")
     
     except ImportError:
-        st.error("Audio recorder not available. Please install: pip install audio-recorder-streamlit")
+        st.warning("🎤 Audio recorder not available in this deployment.")
+        st.info("📁 You can upload an audio file instead:")
+        
+        # File upload alternative
+        uploaded_audio = st.file_uploader("Upload audio file", type=["wav", "mp3", "m4a"])
+        if uploaded_audio:
+            st.audio(uploaded_audio)
+            if st.button("Transcribe Uploaded Audio"):
+                with st.spinner("Transcribing audio..."):
+                    stt = SpeechToText()
+                    result = stt.transcribe_audio(uploaded_audio)
+                    if "Error" not in result:
+                        st.success("Transcription completed!")
+                        st.text_area("Transcribed Text:", result, height=100)
+                    else:
+                        st.error(result)
     
     # Manual text input section
     st.markdown("---")
-    st.info("📝 Manual text input:")
+    st.info("📝 Or enter text manually:")
     manual_text = st.text_area("Type or paste your text here:", height=100)
     
     if manual_text:
-        st.success("Text ready for processing!")
-        if st.button("Process Text"):
-            st.text_area("Processed Text:", manual_text, height=100)
+        st.success("Text ready!")
+        st.text_area("Your Text:", manual_text, height=100)
