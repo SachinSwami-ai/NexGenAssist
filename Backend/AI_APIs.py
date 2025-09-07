@@ -1,8 +1,26 @@
 import os
 from typing import Optional
-from dotenv import load_dotenv
 
-load_dotenv()
+# Try to load dotenv for local development, but don't fail if not available
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    pass  # dotenv not available, use environment variables directly
+
+# For Streamlit Cloud, try to use st.secrets
+try:
+    import streamlit as st
+    if hasattr(st, 'secrets'):
+        # Use Streamlit secrets if available
+        def get_env_var(key):
+            return st.secrets.get(key, os.getenv(key))
+    else:
+        def get_env_var(key):
+            return os.getenv(key)
+except ImportError:
+    def get_env_var(key):
+        return os.getenv(key)
 
 class AIModelHandler:
     def __init__(self):
@@ -20,7 +38,7 @@ class AIModelHandler:
     def _openai_response(self, prompt: str) -> str:
         try:
             import openai
-            client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+            client = openai.OpenAI(api_key=get_env_var("OPENAI_API_KEY"))
             response = client.chat.completions.create(
                 model="gpt-3.5-turbo",
                 messages=[{"role": "user", "content": prompt}],
@@ -33,7 +51,7 @@ class AIModelHandler:
     def _gemini_response(self, prompt: str) -> str:
         try:
             import google.generativeai as genai
-            genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
+            genai.configure(api_key=get_env_var("GEMINI_API_KEY"))
             model = genai.GenerativeModel('gemini-pro')
             response = model.generate_content(prompt)
             return response.text
@@ -42,7 +60,7 @@ class AIModelHandler:
     
     def _groq_response(self, prompt: str) -> str:
         try:
-            groq_api_key = os.getenv("GROQ_API_KEY")
+            groq_api_key = get_env_var("GROQ_API_KEY")
             if not groq_api_key:
                 return "Groq Error: GROQ_API_KEY not found in environment variables. Please add your Groq API key to the .env file."
             
