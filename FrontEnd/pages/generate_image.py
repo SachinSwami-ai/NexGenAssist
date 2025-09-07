@@ -1,6 +1,12 @@
 import streamlit as st
 import sys
-sys.path.append('../../Backend')
+import os
+
+# Add Backend to path
+backend_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'Backend')
+if os.path.exists(backend_path):
+    sys.path.insert(0, backend_path)
+
 from image_generator import ImageGenerator
 
 def show_generate_image():

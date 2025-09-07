@@ -1,7 +1,13 @@
 import streamlit as st
 import sys
 import io
-sys.path.append('../../Backend')
+import os
+
+# Add Backend to path
+backend_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'Backend')
+if os.path.exists(backend_path):
+    sys.path.insert(0, backend_path)
+
 from speech_to_text import SpeechToText
 
 def show_speech_to_text():

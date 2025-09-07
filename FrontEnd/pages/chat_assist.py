@@ -2,7 +2,13 @@ import streamlit as st
 import pandas as pd
 from datetime import datetime
 import sys
-sys.path.append('../../Backend')
+import os
+
+# Add Backend to path
+backend_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'Backend')
+if os.path.exists(backend_path):
+    sys.path.insert(0, backend_path)
+
 from AI_APIs import AIModelHandler
 
 def show_chat_assist():
