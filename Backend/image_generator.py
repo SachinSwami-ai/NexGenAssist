@@ -1,7 +1,24 @@
 import os
-from dotenv import load_dotenv
 
-load_dotenv()
+# Try to load dotenv for local development, but don't fail if not available
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    pass
+
+# For Streamlit Cloud, try to use st.secrets
+try:
+    import streamlit as st
+    if hasattr(st, 'secrets'):
+        def get_env_var(key):
+            return st.secrets.get(key, os.getenv(key))
+    else:
+        def get_env_var(key):
+            return os.getenv(key)
+except ImportError:
+    def get_env_var(key):
+        return os.getenv(key)
 
 class ImageGenerator:
     def __init__(self):
@@ -13,7 +30,7 @@ class ImageGenerator:
     def _generate_with_dalle(self, prompt, size="1024x1024"):
         try:
             import openai
-            client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+            client = openai.OpenAI(api_key=get_env_var("OPENAI_API_KEY"))
             
             # Try DALL-E 3 first
             try:

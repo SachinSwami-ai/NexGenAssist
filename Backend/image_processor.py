@@ -1,9 +1,26 @@
 import os
 from PIL import Image
 import io
-from dotenv import load_dotenv
 
-load_dotenv()
+# Try to load dotenv for local development, but don't fail if not available
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    pass
+
+# For Streamlit Cloud, try to use st.secrets
+try:
+    import streamlit as st
+    if hasattr(st, 'secrets'):
+        def get_env_var(key):
+            return st.secrets.get(key, os.getenv(key))
+    else:
+        def get_env_var(key):
+            return os.getenv(key)
+except ImportError:
+    def get_env_var(key):
+        return os.getenv(key)
 
 class ImageProcessor:
     def __init__(self):
@@ -26,7 +43,7 @@ class ImageProcessor:
         import base64
         import io
         
-        client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+        client = openai.OpenAI(api_key=get_env_var("OPENAI_API_KEY"))
         
         # Convert image to base64
         img_buffer = io.BytesIO()
@@ -64,7 +81,7 @@ class ImageProcessor:
         import io
         from PIL import Image
         
-        client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+        client = openai.OpenAI(api_key=get_env_var("OPENAI_API_KEY"))
         
         # Open and convert image to base64
         image = Image.open(image_file)
