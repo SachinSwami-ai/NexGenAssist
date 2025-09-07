@@ -73,11 +73,3 @@ def show_speech_to_text():
                     else:
                         st.error(result)
     
-    # Manual text input section
-    st.markdown("---")
-    st.info("📝 Or enter text manually:")
-    manual_text = st.text_area("Type or paste your text here:", height=100)
-    
-    if manual_text:
-        st.success("Text ready!")
-        st.text_area("Your Text:", manual_text, height=100)
