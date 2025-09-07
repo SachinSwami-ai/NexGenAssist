@@ -21,41 +21,50 @@ def show_speech_to_text():
         return
     
     # Audio recording section
+    audio_recorder_available = False
     try:
         from audio_recorder_streamlit import audio_recorder
-        
-        st.info("🎤 Record your voice and get transcription")
-        
-        # Audio recorder widget
-        audio_bytes = audio_recorder(
-            text="Click to record",
-            recording_color="#e8b62c",
-            neutral_color="#6aa36f",
-            icon_name="microphone",
-            icon_size="2x"
-        )
-        
-        # Process recorded audio
-        if audio_bytes:
-            st.audio(audio_bytes, format="audio/wav")
-            st.success("Audio recorded successfully!")
-            
-            # Transcription button
-            if st.button("Get Transcription", use_container_width=True):
-                with st.spinner("Transcribing audio..."):
-                    stt = SpeechToText()
-                    audio_file = io.BytesIO(audio_bytes)
-                    audio_file.name = "recording.wav"
-                    result = stt.transcribe_audio(audio_file)
-                    
-                    # Display transcription result
-                    if "Error" not in result and "unavailable" not in result:
-                        st.success("Transcription completed!")
-                        st.text_area("Transcribed Text:", result, height=100)
-                    else:
-                        st.warning("Transcription service unavailable.")
+        audio_recorder_available = True
+    except (ImportError, ModuleNotFoundError):
+        pass
     
-    except ImportError:
+    if audio_recorder_available:
+        try:
+            st.info("🎤 Record your voice and get transcription")
+            
+            # Audio recorder widget
+            audio_bytes = audio_recorder(
+                text="Click to record",
+                recording_color="#e8b62c",
+                neutral_color="#6aa36f",
+                icon_name="microphone",
+                icon_size="2x"
+            )
+            
+            # Process recorded audio
+            if audio_bytes:
+                st.audio(audio_bytes, format="audio/wav")
+                st.success("Audio recorded successfully!")
+                
+                # Transcription button
+                if st.button("Get Transcription", use_container_width=True):
+                    with st.spinner("Transcribing audio..."):
+                        stt = SpeechToText()
+                        audio_file = io.BytesIO(audio_bytes)
+                        audio_file.name = "recording.wav"
+                        result = stt.transcribe_audio(audio_file)
+                        
+                        # Display transcription result
+                        if "Error" not in result and "unavailable" not in result:
+                            st.success("Transcription completed!")
+                            st.text_area("Transcribed Text:", result, height=100)
+                        else:
+                            st.warning("Transcription service unavailable.")
+        except Exception as e:
+            st.error(f"Audio recorder error: {str(e)}")
+            audio_recorder_available = False
+    
+    if not audio_recorder_available:
         st.warning("🎤 Audio recorder not available in this deployment.")
         st.info("📁 You can upload an audio file instead:")
         
