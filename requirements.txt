@@ -1,0 +1,8 @@
+streamlit
+openai
+google-generativeai
+groq
+python-dotenv
+audio-recorder-streamlit
+Pillow
+requests

@@ -1,6 +1,12 @@
 import streamlit as st
+import os
 import sys
-sys.path.append('../Backend')
+
+# Add Backend to path for local development
+backend_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'Backend')
+if os.path.exists(backend_path):
+    sys.path.insert(0, backend_path)
+
 from pages.chat_assist import show_chat_assist
 from pages.image_processor import show_image_processor
 from pages.generate_image import show_generate_image
@@ -16,8 +22,13 @@ st.set_page_config(
 )
 
 # Load custom CSS styles
-with open('CSS Design/styles.css') as f:
-    st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
+try:
+    css_path = os.path.join(os.path.dirname(__file__), 'CSS Design', 'styles.css')
+    if os.path.exists(css_path):
+        with open(css_path) as f:
+            st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
+except FileNotFoundError:
+    pass  # CSS file not found, continue without custom styles
 
 # Hide default Streamlit navigation elements and style chat input
 st.markdown("""
