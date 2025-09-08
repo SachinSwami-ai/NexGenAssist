@@ -22,13 +22,157 @@ st.set_page_config(
 )
 
 # Load custom CSS styles
-try:
-    css_path = os.path.join(os.path.dirname(__file__), 'CSS Design', 'styles.css')
-    if os.path.exists(css_path):
-        with open(css_path) as f:
-            st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
-except FileNotFoundError:
-    pass  # CSS file not found, continue without custom styles
+st.markdown("""
+<style>
+.main {
+    background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%) !important;
+    padding-top: 80px;
+}
+
+.stApp {
+    background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%) !important;
+}
+
+section[data-testid="stMain"] {
+    background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%) !important;
+}
+
+.fixed-header {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100vw !important;
+    z-index: 999999 !important;
+    background: linear-gradient(90deg, #ff6b6b, #ffa726) !important;
+    padding: 15px !important;
+    text-align: center !important;
+    color: white !important;
+    font-size: 24px !important;
+    font-weight: bold !important;
+    margin: 0 !important;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3) !important;
+}
+
+.stApp {
+    padding-top: 0 !important;
+}
+
+.stApp > div:first-child {
+    padding-top: 0 !important;
+}
+
+.clear-chat-fixed {
+    position: fixed !important;
+    bottom: 20px !important;
+    left: 20px !important;
+    z-index: 1000 !important;
+    background: #e74c3c !important;
+    color: white !important;
+    border: none !important;
+    padding: 12px 20px !important;
+    border-radius: 25px !important;
+    font-weight: bold !important;
+    cursor: pointer !important;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2) !important;
+    font-size: 14px !important;
+}
+
+.clear-chat-fixed:hover {
+    background: #c0392b !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.3) !important;
+}
+
+.selected-button {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    color: white !important;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4) !important;
+    border: 2px solid #667eea !important;
+    transform: translateY(-2px) !important;
+}
+
+.selected-button:hover {
+    background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%) !important;
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6) !important;
+}
+
+/* Sidebar styling for all versions */
+.stSidebar,
+.stSidebar > div,
+.stSidebarContent,
+.css-1d391kg,
+.css-17lntkn,
+.css-pkbazv,
+section[data-testid="stSidebar"],
+section[data-testid="stSidebar"] > div,
+section[data-testid="stSidebar"] .stSidebarContent,
+.st-emotion-cache-1cypcdb,
+.st-emotion-cache-6qob1r {
+    background: linear-gradient(180deg, #ff9a9e 0%, #fecfef 100%) !important;
+}
+
+/* Main content styling */
+.main,
+.stApp,
+.stMainBlockContainer,
+section[data-testid="stMain"],
+.st-emotion-cache-z5fcl4,
+.st-emotion-cache-18ni7ap {
+    background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%) !important;
+}
+
+.chat-message {
+    padding: 1rem;
+    border-radius: 0.5rem;
+    margin-bottom: 1rem;
+    background: rgba(255, 255, 255, 0.8);
+}
+
+.clear-chat-btn {
+    background: #ff4757;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+.clear-chat-btn:hover {
+    background: #ff3742;
+}
+
+.processing-icon {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #ff6b6b;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-right: 10px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: #ff6b6b;
+    color: white;
+    text-align: center;
+    padding: 10px;
+    font-size: 12px;
+}
+</style>
+""", unsafe_allow_html=True)
 
 # Hide default Streamlit navigation elements and style chat input
 st.markdown("""
