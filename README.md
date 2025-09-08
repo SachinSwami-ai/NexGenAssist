@@ -1,4 +1,4 @@
-# NexGenAssist 🤖
+# NexGenAssist - Added new line 🤖
 
 Your AI-powered assistant for multiple tasks including chat, image processing, image generation, speech-to-text, and text-to-speech.
 
